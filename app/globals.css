@@ -1,0 +1,114 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 4rem; /* Add padding for sticky navbar */
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050816;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1a1a2e;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2a2a3e;
+}
+
+/* Gradient text animation */
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient 5s ease infinite;
+}
+
+/* 3D perspective for cards */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+/* Shooting star animation */
+@keyframes shootingStar {
+  0% {
+    transform: translateX(-100%) translateY(100%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%) translateY(-100%);
+    opacity: 0;
+  }
+}
+
+.shooting-star {
+  animation: shootingStar 3s linear infinite;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .perspective-1000 {
+    perspective: 500px; /* Reduce perspective on mobile for better viewing */
+  }
+
+  /* Reduce animation intensity on mobile */
+  .mobile-reduced-motion {
+    transition-duration: 0.2s !important;
+    transform: none !important;
+  }
+}
+
+/* Active navbar indicator animation */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.navbar-active-indicator {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Touch device optimizations */
+@media (pointer: coarse) {
+  .touch-feedback {
+    transition: transform 0.2s ease-out;
+  }
+
+  .touch-feedback:active {
+    transform: scale(0.95);
+  }
+}
