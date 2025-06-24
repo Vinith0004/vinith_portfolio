@@ -3,20 +3,17 @@
 import { useRef, useState } from "react"
 import { motion, useInView } from "framer-motion"
 import { Mail, MapPin, Phone, Send } from "lucide-react"
-import { db } from "@/lib/firebase"
-import { collection, addDoc, Timestamp } from "firebase/firestore"
+import emailjs from '@emailjs/browser'
 
 export default function Contact() {
   const ref = useRef(null)
   const formRef = useRef<HTMLFormElement>(null)
   const isInView = useInView(ref, { once: false, amount: 0.2 })
-
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     message: "",
   })
-
   const [isSending, setIsSending] = useState(false)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -29,12 +26,14 @@ export default function Contact() {
     setIsSending(true)
 
     try {
-      await addDoc(collection(db, "contacts"), {
-        name: formData.name,
-        email: formData.email,
-        message: formData.message,
-        createdAt: Timestamp.now(),
-      })
+      if (!formRef.current) return
+
+      await emailjs.sendForm(
+        'service_zjf9d57', // Your Service ID
+        'template_xq8rtdx', // Your Template ID
+        formRef.current,
+        'zL63NOicFb_G2y-gX' // Your Public Key
+      )
 
       alert("Thank you for your message! I'll get back to you soon.")
       setFormData({ name: "", email: "", message: "" })
@@ -64,7 +63,6 @@ export default function Contact() {
   return (
     <section id="contact" className="py-20 px-4 sm:px-6 lg:px-8 min-h-screen flex items-center">
       <div className="max-w-6xl mx-auto">
-        {/* Heading Section */}
         <div className="text-center mb-16">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -85,7 +83,6 @@ export default function Contact() {
           </motion.p>
         </div>
 
-        {/* Main Grid */}
         <motion.div
           ref={ref}
           variants={container}
@@ -93,9 +90,7 @@ export default function Contact() {
           animate={isInView ? "show" : "hidden"}
           className="grid grid-cols-1 md:grid-cols-2 gap-10"
         >
-          {/* Left: Contact Info */}
-        
-            <motion.div variants={item}>
+          <motion.div variants={item}>
             <div className="bg-[#0a0a1a] rounded-xl p-6 shadow-xl shadow-purple-500/5 border border-[#1a1a2e] h-full">
               <h3 className="text-xl font-bold mb-6">Contact Information</h3>
               <div className="space-y-6">
@@ -198,9 +193,7 @@ export default function Contact() {
               </div>
             </div>
           </motion.div>
-          
 
-          {/* Right: Contact Form */}
           <motion.div variants={item}>
             <form
               ref={formRef}
@@ -258,7 +251,7 @@ export default function Contact() {
                 className={`w-full px-6 py-3 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 text-white font-medium hover:from-purple-700 hover:to-blue-700 transition-all duration-300 flex items-center justify-center gap-2 ${isSending ? 'opacity-70 cursor-not-allowed' : ''}`}
               >
                 {isSending ? (
-                  "Sending..."
+                  'Sending...'
                 ) : (
                   <>
                     <Send size={18} />
